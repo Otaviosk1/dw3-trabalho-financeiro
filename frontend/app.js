@@ -5,6 +5,7 @@ const nunjucks = require('nunjucks');
 require('dotenv').config();
 
 const router = require('./routes/router');
+const clientesRouter = require('./routes/rtClientes'); // <-- Adicionado: Importa as rotas de clientes
 
 const app = express();
 const port = process.env.PORT || 40100;
@@ -31,6 +32,7 @@ app.use(session({
 
 // Ativar Rotas
 app.use(router);
+app.use('/clientes', clientesRouter); // <-- Adicionado: Ativa o prefixo /clientes para o seu módulo
 
 app.listen(port, () => {
     console.log(`Servidor Front-End rodando na porta ${port}`);

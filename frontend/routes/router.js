@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ctlLogin = require('../apps/login/controller/ctlLogin');
+const ctlLogin = require('../public/apps/login/controller/ctlLogin');
 
 // Rotas da Tela de Login
 router.get('/Login', ctlLogin.Login);
@@ -13,7 +13,11 @@ router.get('/', (req, res) => {
     if (!req.session.token) {
         return res.redirect('/Login');
     }
-    res.render('index', { token: req.session.token });
+    res.render('index', { 
+        token: req.session.token,
+        showNavbar: true,
+        activeMenu: 'home'
+    });
 });
 
 module.exports = router;

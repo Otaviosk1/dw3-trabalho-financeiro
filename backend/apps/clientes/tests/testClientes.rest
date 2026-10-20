@@ -1,0 +1,35 @@
+### Necessário para autenticar e obter o token JWT criado pelo Integrante 1
+# @name loginAutenticado
+POST http://localhost:40000/Login HTTP/1.1
+content-type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+### Variável dinâmica para injetar o token JWT
+@accessToken = {{loginAutenticado.response.body.token}}
+
+### Teste de Inserção de Cliente
+POST http://localhost:40000/insertCliente HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "codigo": "CLI03",
+  "nome": "Empresa Exemplo Ltda",
+  "endereco": "Av. Brasil, 1500",
+  "ativo": true,
+  "deleted": false
+}
+
+### Teste de Listar Todos os Clientes Ativos
+GET http://localhost:40000/getAllClientes HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Teste de Buscar Cliente por ID
+GET http://localhost:40000/getClienteByID/1 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
