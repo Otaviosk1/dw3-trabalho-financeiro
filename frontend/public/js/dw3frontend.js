@@ -1,14 +1,13 @@
-// Ficheiro: frontend/public/js/dw3frontend.js
-
+// Valida se o utilizador está autenticado no frontend
 function dw3IsLogged() {
   return true;
 }
 
+// Monta cabeçalhos com o token JWT vindo do DOM ou do localStorage
 function dw3MontarHeadersAutenticacao() {
-  // Procura o token injetado na página ou no localStorage
   var elemento = document.getElementById('clientesListagem') || document.getElementById('frmCliente');
   var token = (elemento && elemento.dataset.token) || localStorage.getItem('accessToken');
-  
+
   if (token && token !== 'undefined' && !localStorage.getItem('accessToken')) {
     localStorage.setItem('accessToken', token);
   }
@@ -21,7 +20,9 @@ function dw3MontarHeadersAutenticacao() {
   };
 }
 
+// Remove o token do cliente e força o fim da sessão no Back-End
 function dw3Logout() {
   localStorage.removeItem('accessToken');
-  window.location.href = '/Login';
+  sessionStorage.clear();
+  window.location.href = '/Logout';
 }

@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 
+// Pool de conexoes com o PostgreSQL
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -8,6 +9,7 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
+// Wrapper para execucao de queries
 module.exports = {
   query: (text, params) => pool.query(text, params),
 };

@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Metadados do documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistema Financeiro</title>
+
+    <!-- Folha de estilos do Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<!-- Estrutura centralizada vertical e horizontalmente -->
 <body class="bg-light d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <!-- Container do formulario de login -->
     <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
         <h3 class="text-center mb-4">Acesso ao Sistema</h3>
         
@@ -17,15 +22,21 @@
         </div>
         {% endif %}
 
+        <!-- Envio dos dados de autenticacao para a rota de login -->
         <form action="/Login" method="POST">
+            <!-- Campo de usuario -->
             <div class="mb-3">
                 <label for="username" class="form-label">Usuário</label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="admin" required>
             </div>
+
+            <!-- Campo de senha -->
             <div class="mb-3">
                 <label for="password" class="form-label">Senha</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="123" required>
             </div>
+
+            <!-- Botao de envio -->
             <button type="submit" class="btn btn-primary w-100">Entrar</button>
         </form>
     </div>

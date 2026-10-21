@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+
+<div class="container mt-4">
+  <!-- Cabecalho do Formulario -->
+  <header class="page-header mb-4">
+    <p class="page-kicker text-primary fw-semibold mb-1">Financeiro</p>
+    <h2 class="h3 fw-bold mb-2" id="tituloForm">Conta a Receber</h2>
+    <p class="text-secondary mb-0">Preencha os dados do lançamento financeiro.</p>
+  </header>
+  
+  <div id="formAlert" class="alert alert-danger d-none" role="alert"></div>
+
+  <!-- Formulario de Cadastro e Edicao -->
+  <div class="card page-card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <form id="formContaReceber" class="needs-validation" novalidate data-servidor-dw3="{{ servidorDw3 }}" data-token="{{ token }}">
+        <input type="hidden" id="token" value="{{ token }}">
+        <input type="hidden" id="contareceberid" name="contareceberid">
+        
+        <div class="mb-3">
+          <label for="clienteid" class="form-label fw-semibold">Cliente</label>
+          <select class="form-select" id="clienteid" name="clienteid" required>
+            <option value="" selected disabled>Selecione um cliente...</option>
+          </select>
+          <div class="invalid-feedback">Por favor, selecione um cliente.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="descricao" class="form-label fw-semibold">Descrição / Título</label>
+          <input type="text" class="form-control" id="descricao" name="descricao" required>
+          <div class="invalid-feedback">Informe a descrição.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="valor" class="form-label fw-semibold">Valor (R$)</label>
+          <input type="number" step="0.01" class="form-control" id="valor" name="valor" required>
+          <div class="invalid-feedback">Informe um valor válido.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="datavencimento" class="form-label fw-semibold">Data de Vencimento</label>
+          <input type="date" class="form-control" id="datavencimento" name="datavencimento" required>
+          <div class="invalid-feedback">Informe a data de vencimento.</div>
+        </div>
+        
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="recebido" name="recebido">
+          <label class="form-check-label fw-semibold" for="recebido">Recebido</label>
+        </div>
+        
+        <div class="d-flex gap-2 justify-content-end mt-4">
+          <a href="/contas_receber" class="btn btn-secondary">Voltar</a>
+          <button type="submit" id="btnSalvar" class="btn btn-success">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts e Dependencias -->
+<script src="/js/dw3frontend.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="/apps/contas_receber/vwFormContasReceber.js"></script>
+{% endblock %}

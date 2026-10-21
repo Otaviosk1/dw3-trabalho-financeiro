@@ -1,4 +1,3 @@
-// Ficheiro: frontend/apps/clientes/vwFormClientes.js
 document.addEventListener('DOMContentLoaded', function() {
   if (!dw3IsLogged()) {
     return;
@@ -22,11 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   form.addEventListener('submit', function(event) {
-  event.preventDefault(); // <-- Isto impede que o formulário tente recarregar ou enviar a página por HTML
-  processarSubmissaoFormulario(servidorDw3, oper, clienteId, alertBox);
-});
+    event.preventDefault();
+    processarSubmissaoFormulario(servidorDw3, oper, clienteId, alertBox);
+  });
 });
 
+// Ajusta titulos e botoes conforme a operacao (Cr, Up, Re, De)
 function ajustarInterfaceFormulario(oper) {
   var title = document.getElementById('formTitle');
   var btnSalvar = document.getElementById('btnSalvar');
@@ -50,6 +50,7 @@ function ajustarInterfaceFormulario(oper) {
   }
 }
 
+// Desabilita inputs para visualizacao ou exclusao
 function desativarCampos() {
   var campos = ['codigo', 'nome', 'endereco', 'ativo'];
   campos.forEach(function(id) {
@@ -60,6 +61,7 @@ function desativarCampos() {
   });
 }
 
+// Carrega os dados do cliente por ID
 async function carregarClientePorId(servidorDw3, clienteId, alertBox) {
   try {
     var response = await fetch(servidorDw3 + '/getClienteByID/' + clienteId, {
@@ -87,8 +89,8 @@ async function carregarClientePorId(servidorDw3, clienteId, alertBox) {
   }
 }
 
+// Envia os dados para a API conforme o verbo HTTP correspondente
 async function processarSubmissaoFormulario(servidorDw3, oper, clienteId, alertBox) {
-  // Garante um valor padrão caso o data-servidor-dw3 venha vazio
   var urlServidor = servidorDw3 || 'http://localhost:40000';
 
   var dados = {
@@ -111,7 +113,6 @@ async function processarSubmissaoFormulario(servidorDw3, oper, clienteId, alertB
   }
 
   try {
-    // Mescla o token de autenticação com o Content-Type: application/json
     var headers = Object.assign(
       { 'Content-Type': 'application/json' },
       typeof dw3MontarHeadersAutenticacao === 'function' ? dw3MontarHeadersAutenticacao() : {}
@@ -124,8 +125,14 @@ async function processarSubmissaoFormulario(servidorDw3, oper, clienteId, alertB
     });
 
     var data = await response.json();
+
+    // Trata mensagens de erro retornadas pelo backend
     if (!response.ok || data.auth === false || data.status !== 'ok') {
-      throw new Error(data.message || 'Erro ao executar operação no servidor.');
+      var mensagemReal = (data.status && data.status !== 'error' && data.status !== 'ok')
+        ? data.status
+        : (data.message || 'Erro ao executar operação no servidor.');
+
+      throw new Error(mensagemReal);
     }
 
     window.location.href = '/clientes';

@@ -1,4 +1,3 @@
-// Ficheiro: frontend/apps/clientes/vwLstClientes.js
 document.addEventListener('DOMContentLoaded', function() {
   if (!dw3IsLogged()) {
     return;
@@ -15,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
   carregarClientes(servidorDw3, alertBox);
 });
 
+// Busca a lista de clientes da API
 async function carregarClientes(servidorDw3, alertBox) {
   try {
     if (!servidorDw3) {
@@ -44,6 +44,7 @@ async function carregarClientes(servidorDw3, alertBox) {
   }
 }
 
+// Inicializacao e configuracao do DataTable
 function inicializarTabelaClientes(clientes) {
   new DataTable('#tblClientes', {
     data: clientes,
@@ -98,6 +99,7 @@ function inicializarTabelaClientes(clientes) {
   });
 }
 
+// Event delegation para os botoes de acao da tabela
 function configurarOperacoesClientes(alertBox) {
   var tabela = document.getElementById('tblClientes');
   if (!tabela) {
@@ -125,6 +127,7 @@ function configurarOperacoesClientes(alertBox) {
   });
 }
 
+// Sanitizacao de strings para atributos HTML
 function escaparHtml(valor) {
   return String(valor)
     .replace(/&/g, '&amp;')
@@ -134,6 +137,7 @@ function escaparHtml(valor) {
     .replace(/>/g, '&gt;');
 }
 
+// Exibe mensagem de erro no container de alerta
 function exibirErro(alertBox, mensagem) {
   if (!alertBox) {
     return;

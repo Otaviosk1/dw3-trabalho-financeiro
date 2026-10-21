@@ -1,23 +1,36 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-router.get('/', function(req, res) {
+// Middleware de autenticação com bloqueio de cache para evitar navegação pelo histórico
+const verificaAutenticacao = (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  
+  if (req.session && req.session.token) {
+    next();
+  } else {
+    res.redirect('/Login');
+  }
+};
+
+// Listagem de clientes
+router.get('/', verificaAutenticacao, (req, res) => {
   res.render('clientes/vwLstClientes', {
     title: 'Clientes',
     showNavbar: true,
     activeMenu: 'clientes',
-    servidorDw3: process.env.SERVIDOR_DW3,
-    token: req.session.token // Passa o token da sessão para o HTML
+    servidorDw3: process.env.SERVIDOR_DW3 || 'http://localhost:40000',
+    token: req.session.token
   });
 });
 
-router.get('/form', function(req, res) {
+// Formulário de cadastro e edição
+router.get('/form', verificaAutenticacao, (req, res) => {
   res.render('clientes/vwFormClientes', {
     title: 'Formulário de Clientes',
     showNavbar: true,
     activeMenu: 'clientes',
-    servidorDw3: process.env.SERVIDOR_DW3,
-    token: req.session.token // Passa o token da sessão para o formulário
+    servidorDw3: process.env.SERVIDOR_DW3 || 'http://localhost:40000',
+    token: req.session.token
   });
 });
 

@@ -1,5 +1,6 @@
 const db = require("../../../database/databaseconfig");
 
+// Busca credenciais do usuario por username
 const GetCredencial = async (loginPar) => {
   return (
     await db.query(

@@ -1,13 +1,13 @@
-### Teste de Login
+### Autenticacao
 POST http://localhost:40000/Login HTTP/1.1
 content-type: application/json
 
 {
-    "username": "admin",
-    "password": "123"
+  "username": "admin",
+  "password": "123"
 }
 
-### Teste de Logout
+### Logout
 POST http://localhost:40000/Logout HTTP/1.1
 content-type: application/json
 

@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bCrypt = require("bcryptjs");
 const mdlLogin = require("../model/mdlLogin");
 
+// Valida credenciais do usuario e emite o token JWT
 const Login = async (req, res) => {
   const { username, password } = req.body;
   const credencial = await mdlLogin.GetCredencial(username);
@@ -10,16 +11,20 @@ const Login = async (req, res) => {
     return res.status(200).json({ auth: false, message: "Usuário não identificado!" });
   }
 
+  // Compara a senha informada com o hash salvo
   if (bCrypt.compareSync(password, credencial[0].password)) {
-    const token = jwt.sign({ username: credencial[0].username }, process.env.SECRET_API, {
-      expiresIn: 600, // Expira em 10 minutos
-    });
-    return res.json({ auth: true, token: token });
+    const token = jwt.sign(
+      { username: credencial[0].username }, 
+      process.env.SECRET_API, 
+      { expiresIn: '8h' }
+    );
+    return res.json({ auth: true, token });
   }
 
   return res.status(200).json({ auth: false, message: "Login inválido!" });
 };
 
+// Middleware de autorizacao por Bearer Token
 function AutenticaJWT(req, res, next) {
   const tokenHeader = req.headers["authorization"];
   if (!tokenHeader) {
@@ -29,7 +34,7 @@ function AutenticaJWT(req, res, next) {
   const bearer = tokenHeader.split(" ");
   const token = bearer[1];
 
-  jwt.verify(token, process.env.SECRET_API, function (err, decoded) {
+  jwt.verify(token, process.env.SECRET_API, (err, decoded) => {
     if (err) {
       return res.status(200).json({ auth: false, message: "JWT inválido ou expirado" });
     }
@@ -38,6 +43,7 @@ function AutenticaJWT(req, res, next) {
   });
 }
 
+// Invalida o token no cliente
 const Logout = (req, res) => {
   res.json({ auth: false, token: null });
 };

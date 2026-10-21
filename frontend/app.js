@@ -1,39 +1,45 @@
+// Importacao dos modulos e dependencias principais
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const nunjucks = require('nunjucks');
 require('dotenv').config();
 
+// Importacao dos roteadores da aplicacao
 const router = require('./routes/router');
-const clientesRouter = require('./routes/rtClientes'); // <-- Adicionado: Importa as rotas de clientes
+const clientesRouter = require('./routes/rtClientes'); 
+const contasReceberRouter = require('./routes/rtContasReceber');
 
+// Inicializacao da aplicacao Express e definicao da porta
 const app = express();
 const port = process.env.PORT || 40100;
 
-// Configuração do Nunjucks para renderizar HTML
+// Configuracao do Nunjucks para renderizacao dos templates HTML
 nunjucks.configure('views', {
-    autoescape: true,
-    express: app,
-    watch: false
+  autoescape: true,
+  express: app,
+  watch: false
 });
 app.set('view engine', 'html');
 
-// Configurações de pastas públicas e parser
+// Servico de arquivos estaticos e configuracao de parsers para requisicoes
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Configuração da Sessão no Front-End
+// Configuracao de sessao para armazenamento do token de autenticacao
 app.use(session({
-    secret: 'chave_secreta_frontend_dw3',
-    resave: false,
-    saveUninitialized: true
+  secret: 'chave_secreta_frontend_dw3',
+  resave: false,
+  saveUninitialized: true
 }));
 
-// Ativar Rotas
+// Ativacao e prefixacao das rotas dos modulos
 app.use(router);
-app.use('/clientes', clientesRouter); // <-- Adicionado: Ativa o prefixo /clientes para o seu módulo
+app.use('/clientes', clientesRouter);
+app.use('/contas_receber', contasReceberRouter);
 
+// Inicializacao do servidor HTTP
 app.listen(port, () => {
-    console.log(`Servidor Front-End rodando na porta ${port}`);
+  console.log(`Servidor Front-End rodando na porta ${port}`);
 });

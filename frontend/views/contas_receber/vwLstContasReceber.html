@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<!-- Cabecalho da Pagina -->
+<header class="page-header mb-4">
+  <p class="page-kicker text-primary fw-semibold mb-1">Financeiro</p>
+  <h1 class="h3 fw-bold mb-2">Contas a Receber</h1>
+  <p class="text-secondary mb-0">Consulte e gerencie os lançamentos financeiros cadastrados.</p>
+</header>
+
+<!-- Listagem e Tabela de Contas a Receber -->
+<div class="card page-card border-0 shadow-sm">
+  <div class="card-body p-4">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3 mb-4">
+      <div>
+        <h2 class="h5 fw-semibold mb-1">Lançamentos</h2>
+        <p class="text-secondary mb-0">Contas a receber retornadas pelo servidor backend.</p>
+      </div>
+      <a class="btn btn-primary" href="/contas_receber/form?oper=Cr" id="btnNovaConta">Incluir Nova Conta</a>
+    </div>
+
+    <!-- Alertas de Erro -->
+    <div id="contasAlert" class="alert alert-danger d-none" role="alert"></div>
+
+    <!-- Token de Sessao e Configuracao da API -->
+    <input type="hidden" id="token" value="{{ token }}">
+
+    <div class="table-responsive">
+      <table id="tabelaContasReceber" class="table table-striped table-bordered align-middle w-100" data-servidor-dw3="{{ servidorDw3 }}" data-token="{{ token }}">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Vencimento</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Preenchido dinamicamente via JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts e Dependencias do DataTables -->
+<script src="/js/dw3frontend.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="/apps/contas_receber/vwLstContasReceber.js"></script>
+{% endblock %}

@@ -1,44 +1,86 @@
 const mdlClientes = require("../model/mdlClientes");
 
-const GetAllClientes = (req, res) =>
-  (async () => {
-    let registro = await mdlClientes.GetAllClientes();
-    res.json({ status: "ok", registro: registro });
-  })();
+// Lista todos os clientes ativos
+const GetAllClientes = async (req, res) => {
+  try {
+    const registros = await mdlClientes.GetAllClientes();
 
-const GetClienteByID = (req, res) =>
-  (async () => {
-    const clienteID = parseInt(req.params.clienteid);
-    let registro = await mdlClientes.GetClienteByID(clienteID);
-    res.json({ status: "ok", registro: registro });
-  })();
+    // Normaliza os campos para consumo na view
+    const registrosFormatados = registros.map(c => ({
+      clienteid: c.clienteid,
+      id: c.clienteid,
+      codigo: c.codigo,
+      nome: c.nome,
+      endereco: c.endereco,
+      ativo: c.ativo === true || c.ativo === 1 || c.ativo === 'true',
+      deleted: Boolean(c.deleted),
+      removido: Boolean(c.deleted)
+    }));
 
-const InsertCliente = (request, res) =>
-  (async () => {
+    res.json({
+      status: "ok",
+      registro: registrosFormatados,
+      registros: registrosFormatados
+    });
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
+
+// Busca registro de cliente por ID
+const GetClienteByID = async (req, res) => {
+  try {
+    const clienteID = parseInt(req.params.clienteid || req.params.id || req.query.clienteId || req.query.clienteid, 10);
+    const registro = await mdlClientes.GetClienteByID(clienteID);
+
+    if (!registro) {
+      return res.status(404).json({ status: "error", message: "Cliente não encontrado." });
+    }
+
+    res.json({ status: "ok", registro });
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
+
+// Inclusao de novo cliente
+const InsertCliente = async (request, res) => {
+  try {
     const clienteREG = request.body;
-    let { msg, linhasAfetadas } = await mdlClientes.InsertCliente(clienteREG);
-    res.json({ status: msg, linhasAfetadas: linhasAfetadas });
-  })();
+    const { msg, linhasAfetadas } = await mdlClientes.InsertCliente(clienteREG);
+    res.json({ status: msg, linhasAfetadas });
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
 
-const UpdateCliente = (request, res) =>
-  (async () => {
-    const clienteID = parseInt(request.params.clienteid);
+// Atualizacao dos dados cadastrais do cliente
+const UpdateCliente = async (request, res) => {
+  try {
+    const clienteID = parseInt(request.params.clienteid || request.params.id || request.query.clienteId, 10);
     const clienteREG = request.body;
-    let { msg, linhasAfetadas } = await mdlClientes.UpdateCliente(clienteID, clienteREG);
-    res.json({ status: msg, linhasAfetadas: linhasAfetadas });
-  })();
+    const { msg, linhasAfetadas } = await mdlClientes.UpdateCliente(clienteID, clienteREG);
+    res.json({ status: msg, linhasAfetadas });
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
 
-const DeleteCliente = (request, res) =>
-  (async () => {
-    const clienteID = parseInt(request.params.clienteid);
-    let { msg, linhasAfetadas } = await mdlClientes.DeleteCliente(clienteID);
-    res.json({ status: msg, linhasAfetadas: linhasAfetadas });
-  })();
+// Exclusao logica do cliente
+const DeleteCliente = async (request, res) => {
+  try {
+    const clienteID = parseInt(request.params.clienteid || request.params.id || request.query.clienteId, 10);
+    const { msg, linhasAfetadas } = await mdlClientes.DeleteCliente(clienteID);
+    res.json({ status: msg, linhasAfetadas });
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
 
 module.exports = {
   GetAllClientes,
   GetClienteByID,
   InsertCliente,
   UpdateCliente,
-  DeleteCliente,
+  DeleteCliente
 };
